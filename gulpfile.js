@@ -9,12 +9,7 @@ var gulp = require('gulp'),
   sass = require('gulp-sass'),
   babel = require('gulp-babel'),
   image = require('gulp-image'),
-  jsdoc = require('gulp-jsdoc3'),
-  replace = require('gulp-replace'),
-  // markdownIt = require('gulp-markdown-it'),
-  browserSync = require('browser-sync'),
-  fs = require('fs-then-native'),
-  jsdoc2md = require('jsdoc-to-markdown');
+  browserSync = require('browser-sync');
 
 /*
  * Directories here
@@ -104,43 +99,6 @@ gulp.task('image', () => {
   return gulp.src(paths.images + '*')
     .pipe(image())
     .pipe(gulp.dest(paths.img));
-});
-
-gulp.task('doc', (cb) => {
-  var config = require('./jsdoc.json');
-  gulp.src([
-    paths.nodeMods + 'uport-connect/src/**/**/*.js',
-    paths.nodeMods + 'uport-lite/READEME.md',
-    paths.nodeMods + 'uport-registry/READEME.md',
-    paths.nodeMods + 'uport/READEME.md'
-  ], {read: false})
-  .pipe(jsdoc(config, cb));
-});
-
-gulp.task('jsdocs', () => {
-
-  var filesArray = [
-    paths.nodeMods + 'uport-connect/src/Connect.js',
-    paths.nodeMods + 'uport-connect/src/ConnectCore.js',
-    paths.nodeMods + 'uport-connect/src/uportSubprovider.js']
-
-  var options = {
-    "no-gfm": true,
-    "separators": true,
-    files: filesArray
-  }
-
-  return jsdoc2md.render(options)
-    .then(output => {
-      fs.writeFile(paths.partials + 'uport-connect-api.md', output)
-    })
-})
-
-gulp.task('codeblocks', () => {
-  gulp.src([paths.partials + '*.md'])
-    .pipe(replace('<code>', ''))
-    .pipe(replace('</code>', ''))
-    .pipe(gulp.dest(paths.partials + ''));
 });
 
 /**
